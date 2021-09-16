@@ -1,0 +1,99 @@
+We created OpenStore to provide a set of classes that form a good basis for your own ecommerce software.
+
+OpenStore uses established enterprise software patterns and is working towards being a well documented system.
+
+OpenStore is designed to be secure but easy to deploy and manage.
+
+There are three main areas of code that make up a typical OpenStore application.
+
+1) /openstore/php
+ 
+    This is where the majority of the code lives. All business logic and most includes live in here.
+
+2) /openstore/webroot
+
+    This is where all HTML is generated. For security a minimum of PHP code is kept here. This also allows us to maintain a good seperation between business and presentation logic. All business logic is kept in 1) /openstore/php, all presentation logic is kept in 2) /openstore/webroot.
+
+3) /openstore/commercial
+
+    OpenStore is licensed under the GNU GPL. If you change OpenStore and then distribute it you have to obey the terms of the GPL, which means that you have to distribute your changes version under the GPL.
+    If you change OpenStore and then use it to run your own site you do not have to distribute those changes under the GPL. I would like to encourage people to add their changes to the OpenStore codebase. To try and faciliatate this throughout the code there are a number of callbacks to a 'commercial' directory that is configured through /openstore/php/business/Config.php.
+    You can keep any changes that you would like to keep seperate from OpenStore in this directory, and keep any changes that you wish to add to OpenStore in /openstore/php and /openstore/webroot. This means that you can be sure that you will not accidentally check in any code that you wish to keep to yourself.
+    To set up your own commercial area copy /openstore/commercial to /openstore/<your prefix> and configure /openstore/php/business/Config.php to point to <your prefix>
+
+Within 2) /openstore/webroot there are a number of directories:
+
+i)  adminmodel
+
+    This is where all value objects for the admin pages are kept.
+
+ii) business
+
+    This is where all business logic is kept.    
+    Business logic is processes or operations that are central to the way that the application work. Changing code in this directory will fundamentally change how this application functions.
+    Business logic is different from presentation logic in that if you change presentation logic, the way that the application appears to the user will change but it will continue to function in the same way.
+    
+
+iii)model
+
+    This is where all value objects for customer pages are kept.
+
+iv) persistence
+
+    OpenStore uses a Data Access Object pattern, or DAO. Each DAO is an object that just knows how to store and retreive its own data from the database.
+    All DAOs are stored here. 
+
+v)  security
+
+    This is where the security code will go.
+
+vi) util
+
+    This is where small utility classes that don't fit anywhere else are kept.
+    
+
+=================================================================================
+Object Model
+
+The object model is:
+
+
+                    AccessObject
+                         ^
+                         |
+                        DAO
+                         ^
+                         |
+       -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+       |     |         |            |       |          |           |          |                 |     |     |        |            |          |        |          |           |
+  Address Country CountryShipping Coupon Customer InvoiceCoupon InvoiceItem InvoiceShipping MenuItem Note Order OrderHistory OrderProducts Product SaleType ShippingCalc ShippingRate
+
+  
+  
+                  AccessObject
+                        ^
+                        |
+                      ListAO
+                        ^
+                        |
+   --------------------------------------------------------------------------------------------------------------------------------------------------------
+   |          |            |              |            |                  |          |            |                 |         |            |              |
+CountryList CouponList InvoiceItemList MenuItemList OrderHistoryList ProductList SaleTypeList ShippingCalcList  NoteList OrderList OrderProductList OrderViewList
+
+
+
+                 1  1            1  1
+  InvoiceShipping--->  --------  --->Customer
+                      |Order   |
+                 *  1 |--------| 1  1
+      InvoiceItem---> |cost    | --->Coupon
+                      |status  |
+                 1  1 |date    | 1  1
+    InvoiceCoupon---> |password| --->Address
+                       -------- 
+                      ^*       ^1
+                      |        |
+                      v*       |1..*
+                   Product OrderHistory   
+ 
+    

@@ -1,0 +1,27 @@
+Thanks for downloading OpenStore. If you use it please let us know on support@openstore.org. We're not going to spam you it is just nice to know that this work is being used.
+If you're considering using OpenStore have a look at openstore.org for a demonstration. If you'd like to play with the adminstration interface send an email to support@openstore.org for an admin account.
+If you decide not to use OpenStore then please let us know what's lacking. 
+If you've got any other questions then please enter then on the OpenStore SourceForge forums or send an email to support@openstore.
+
+Requirements:
+
+Apache (version 2.0.50 tested)
+PHP (version 4.3.6 tested) with curl
+MySQL (version 12.22 Distrib 4.0.20 tested)
+
+To install OpenStore for development:
+
+1. Unzip this package into a new directory in your web root.
+2. Create a new MYSQL database. Source '<installpath>/database/shop.sql' and '<installpath>/database/populate_shop.sql' into the database.
+3. Source '<installpath>/database/demoProducts.sql' if you want the database to be populated with some dummy products. There is a failry comprehensive demo shop in this script.
+4. Edit '<installpath>/php/business/Config.inc.php' to match your system settings, for instance your database, name and password.
+
+That's the basics. You should be able to hit http://<pathtoyourwebenvironment>/webroot/presentation/index.php and see the demonstration store.
+http://<pathtoyourwebenvironment>/admin/ Will let you do product administration and work with orders.
+
+To move OpenStore into production:
+
+1. Move everything except the contents of '<installpath>/webroot' out of your Apache web root, I'll call it <codepath>. They can be anywhere else on your server as long as the Apache process can read that location.
+2. Move '<installpath>/webroot/admin' to '<installpath>/webroot/somethingelsethatyoudecide' and use Apache's access control to restrict anyone except your nominated administrators from accessing that directory.
+3. Configure '<installpath>/webroot/presentation/CodeRoot.inc.php' to point to the correct location of '<codepath>/php'.
+4. Turn off error reporting to screen in '<codepath>/php/business/Config.inc.php' ( ini_set('display_errors', '0') and ini_set('display_startup_errors', '0') )
